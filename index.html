@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Por Quê? — Entenda a raiz dos seus problemas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --verde:#2D6A4F;
+  --verde-claro:#52B788;
+  --verde-suave:#D8F3DC;
+  --creme:#F8F4EF;
+  --creme-escuro:#EDE8E1;
+  --texto:#1B2D27;
+  --texto-suave:#5C7A6E;
+  --branco:#FFFFFF;
+  --laranja:#E07B39;
+}
+body{font-family:Inter,sans-serif;background:var(--creme);min-height:100vh;color:var(--texto)}
+
+/* BOAS-VINDAS */
+#welcome{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;text-align:center}
+.welcome-icon{font-size:48px;margin-bottom:1.5rem}
+.welcome-title{font-family:Lora,serif;font-size:32px;font-weight:600;color:var(--verde);line-height:1.2;margin-bottom:0.75rem}
+.welcome-sub{font-size:16px;color:var(--texto-suave);max-width:360px;line-height:1.6;margin-bottom:2rem}
+.metodo-box{background:var(--branco);border:1px solid var(--creme-escuro);border-radius:16px;padding:1.5rem;max-width:400px;width:100%;margin-bottom:2rem;text-align:left}
+.metodo-titulo{font-size:12px;font-weight:600;color:var(--verde-claro);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem}
+.metodo-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.metodo-step:last-child{margin-bottom:0}
+.metodo-num{width:28px;height:28px;border-radius:50%;background:var(--verde-suave);color:var(--verde);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.metodo-text{font-size:14px;color:var(--texto-suave);line-height:1.5;padding-top:4px}
+.metodo-text strong{color:var(--texto);font-weight:500}
+.btn-comecar{background:var(--verde);color:var(--branco);border:none;border-radius:12px;padding:14px 32px;font-size:16px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;width:100%;max-width:400px;transition:background 0.2s}
+.btn-comecar:hover{background:#235c42}
+.exemplo-link{margin-top:1rem;font-size:13px;color:var(--texto-suave);cursor:pointer;text-decoration:underline}
+
+/* APP PRINCIPAL */
+#mainApp{display:none;max-width:600px;margin:0 auto;padding:1rem}
+.app-header{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;padding-top:0.5rem}
+.app-logo{font-family:Lora,serif;font-size:22px;font-weight:600;color:var(--verde)}
+.app-logo span{color:var(--laranja)}
+.app-back{margin-left:auto;font-size:13px;color:var(--texto-suave);cursor:pointer;background:none;border:none;font-family:Inter,sans-serif;padding:6px 10px;border-radius:8px}
+.app-back:hover{background:var(--creme-escuro)}
+
+/* CATEGORIAS */
+.secao-titulo{font-family:Lora,serif;font-size:20px;color:var(--verde);margin-bottom:0.5rem}
+.secao-sub{font-size:14px;color:var(--texto-suave);margin-bottom:1.25rem;line-height:1.5}
+.categorias{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.5rem}
+.cat-btn{background:var(--branco);border:2px solid var(--creme-escuro);border-radius:12px;padding:14px 12px;cursor:pointer;text-align:left;transition:all 0.15s;font-family:Inter,sans-serif}
+.cat-btn:hover,.cat-btn.ativo{border-color:var(--verde-claro);background:var(--verde-suave)}
+.cat-icon{font-size:22px;margin-bottom:6px}
+.cat-nome{font-size:13px;font-weight:600;color:var(--texto)}
+.cat-desc{font-size:11px;color:var(--texto-suave);margin-top:2px}
+
+/* PROBLEMA */
+.card{background:var(--branco);border:1px solid var(--creme-escuro);border-radius:16px;padding:1.25rem;margin-bottom:10px}
+.campo-label{font-size:12px;font-weight:600;color:var(--texto-suave);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:8px}
+textarea,input{width:100%;border:1.5px solid var(--creme-escuro);border-radius:10px;padding:10px 14px;font-size:15px;color:var(--texto);font-family:Inter,sans-serif;background:var(--creme);outline:none;transition:border-color 0.15s;resize:none}
+textarea:focus,input:focus{border-color:var(--verde-claro);background:var(--branco)}
+.dica{font-size:12px;color:var(--verde-claro);margin-top:6px;display:flex;align-items:center;gap:4px}
+
+/* PORQUES */
+.porque-card{background:var(--branco);border:1.5px solid var(--creme-escuro);border-radius:16px;padding:1.25rem;margin-bottom:8px;transition:border-color 0.2s}
+.porque-card.ativo{border-color:var(--laranja)}
+.porque-card.completo{border-color:var(--verde-claro)}
+.porque-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.porque-num{width:32px;height:32px;border-radius:50%;background:var(--creme-escuro);color:var(--texto-suave);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
+.porque-card.ativo .porque-num{background:var(--laranja);color:var(--branco)}
+.porque-card.completo .porque-num{background:var(--verde-claro);color:var(--branco)}
+.porque-pergunta{font-size:14px;font-weight:500;color:var(--texto)}
+.porque-exemplo{font-size:11px;color:var(--texto-suave);font-style:italic;margin-top:2px}
+.feedback-ia{margin-top:10px;font-size:13px;padding:10px 14px;border-radius:10px;background:var(--verde-suave);color:var(--verde);border-left:3px solid var(--verde-claro);display:none;line-height:1.6}
+.feedback-ia.show{display:block}
+.conector{text-align:center;padding:4px 0;font-size:12px;color:var(--texto-suave);font-style:italic}
+
+/* LOADER */
+.loader{display:none;align-items:center;gap:10px;padding:12px 16px;background:var(--verde-suave);border-radius:10px;font-size:13px;color:var(--verde);margin:10px 0}
+.loader.show{display:flex}
+.spinner{width:16px;height:16px;border:2px solid var(--creme-escuro);border-top-color:var(--verde);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* BOTÕES */
+.btn-row{display:flex;gap:8px;margin-top:1.25rem;flex-wrap:wrap}
+.btn-primary{padding:12px 20px;background:var(--verde);color:var(--branco);border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;flex:1}
+.btn-primary:hover{background:#235c42}
+.btn-secondary{padding:12px 20px;background:var(--branco);color:var(--texto);border:1.5px solid var(--creme-escuro);border-radius:10px;font-size:14px;cursor:pointer;font-family:Inter,sans-serif}
+.btn-ia{padding:12px 20px;background:var(--laranja);color:var(--branco);border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;flex:1}
+.btn-ia:hover{background:#c96d2e}
+
+/* RESULTADO */
+.resultado-hero{background:var(--verde);border-radius:16px;padding:1.5rem;margin-bottom:10px;text-align:center}
+.resultado-emoji{font-size:40px;margin-bottom:10px}
+.resultado-titulo{font-family:Lora,serif;font-size:20px;color:var(--branco);margin-bottom:6px}
+.resultado-sub{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.5}
+.causa-raiz{background:var(--branco);border-radius:16px;padding:1.25rem;margin-bottom:10px;border-left:4px solid var(--verde-claro)}
+.causa-label{font-size:11px;font-weight:600;color:var(--verde-claro);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px}
+.causa-texto{font-size:16px;font-weight:500;color:var(--texto);line-height:1.5}
+.insight-box{background:var(--creme-escuro);border-radius:16px;padding:1.25rem;margin-bottom:10px;font-size:14px;color:var(--texto-suave);line-height:1.7}
+.insight-titulo{font-weight:600;color:var(--texto);margin-bottom:6px;font-size:14px}
+.acao-box{background:var(--verde-suave);border-radius:16px;padding:1.25rem;margin-bottom:10px}
+.acao-titulo{font-size:12px;font-weight:600;color:var(--verde);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px}
+.acao-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;font-size:14px;color:var(--texto)}
+.acao-item:last-child{margin-bottom:0}
+.acao-bullet{width:20px;height:20px;border-radius:50%;background:var(--verde);color:var(--branco);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+/* PROGRESSO */
+.progresso{display:flex;gap:4px;margin-bottom:1.25rem}
+.prog-step{flex:1;height:4px;border-radius:2px;background:var(--creme-escuro);transition:background 0.3s}
+.prog-step.ativo{background:var(--laranja)}
+.prog-step.feito{background:var(--verde-claro)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--creme-escuro);border-radius:12px;padding:4px;margin-bottom:1.25rem}
+.tab{flex:1;padding:8px 4px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;text-align:center;color:var(--texto-suave);border:none;background:none;transition:all 0.15s;font-family:Inter,sans-serif}
+.tab.active{background:var(--verde);color:var(--branco)}
+.page{display:none}.page.active{display:block}
+
+/* HISTORICO */
+.hist-vazio{text-align:center;padding:2rem;color:var(--texto-suave);font-size:14px}
+.hist-item{background:var(--branco);border:1px solid var(--creme-escuro);border-radius:12px;padding:1rem 1.25rem;margin-bottom:8px;cursor:pointer}
+.hist-item:hover{border-color:var(--verde-claro)}
+.hist-problema{font-size:14px;font-weight:500;color:var(--texto);margin-bottom:4px}
+.hist-meta{display:flex;gap:8px;flex-wrap:wrap}
+.hist-badge{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--creme-escuro);color:var(--texto-suave)}
+.hist-badge.verde{background:var(--verde-suave);color:var(--verde)}
+.hist-detalhe{background:var(--creme);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:13px;color:var(--texto-suave);line-height:1.6;display:none}
+</style>
+</head>
+<body>
+
+<!-- TELA DE BOAS-VINDAS -->
+<div id="welcome">
+  <div class="welcome-icon">🌱</div>
+  <h1 class="welcome-title">Por que isso<br>está acontecendo?</h1>
+  <p class="welcome-sub">Descubra a verdadeira causa dos seus problemas com uma técnica usada por grandes empresas — agora ao alcance de todos.</p>
+
+  <div class="metodo-box">
+    <div class="metodo-titulo">Como funciona o método</div>
+    <div class="metodo-step">
+      <div class="metodo-num">1</div>
+      <div class="metodo-text"><strong>Descreva o problema</strong> — o que está acontecendo na sua vida agora?</div>
+    </div>
+    <div class="metodo-step">
+      <div class="metodo-num">2</div>
+      <div class="metodo-text"><strong>Pergunte "por quê?" cinco vezes</strong> — cada resposta leva você mais fundo</div>
+    </div>
+    <div class="metodo-step">
+      <div class="metodo-num">3</div>
+      <div class="metodo-text"><strong>Descubra a causa raiz</strong> — não o sintoma, mas o que realmente está na origem</div>
+    </div>
+    <div class="metodo-step">
+      <div class="metodo-num">4</div>
+      <div class="metodo-text"><strong>A IA te guia</strong> — analisa suas respostas e sugere caminhos de ação</div>
+    </div>
+  </div>
+
+  <button class="btn-comecar" onclick="iniciarApp()">Começar agora — é gratuito</button>
+  <div class="exemplo-link" onclick="verExemplo()">Ver um exemplo antes de começar</div>
+</div>
+
+<!-- APP PRINCIPAL -->
+<div id="mainApp">
+<div class="app-header">
+  <div class="app-logo">Por <span>Quê?</span></div>
+  <button class="app-back" onclick="voltarInicio()">← Início</button>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="goPage(0,this)">Problema</button>
+  <button class="tab" onclick="goPage(1,this)">Por Quês</button>
+  <button class="tab" onclick="goPage(2,this)">Resultado</button>
+  <button class="tab" onclick="goPage(3,this)">Histórico</button>
+</div>
+
+<!-- PG0: PROBLEMA -->
+<div id="pg0" class="page active">
+  <div class="secao-titulo">Qual é o seu problema?</div>
+  <p class="secao-sub">Descreva com suas próprias palavras o que está te incomodando. Quanto mais honesto você for, mais útil será a análise.</p>
+
+  <div class="card">
+    <label class="campo-label">Categoria</label>
+    <div class="categorias">
+      <button class="cat-btn ativo" onclick="selecionarCat(this,'relacionamentos')" data-cat="relacionamentos">
+        <div class="cat-icon">💙</div>
+        <div class="cat-nome">Relacionamentos</div>
+        <div class="cat-desc">Família, amigos, amor</div>
+      </button>
+      <button class="cat-btn" onclick="selecionarCat(this,'financas')" data-cat="financas">
+        <div class="cat-icon">💰</div>
+        <div class="cat-nome">Finanças</div>
+        <div class="cat-desc">Dinheiro, dívidas, gastos</div>
+      </button>
+      <button class="cat-btn" onclick="selecionarCat(this,'trabalho')" data-cat="trabalho">
+        <div class="cat-icon">💼</div>
+        <div class="cat-nome">Trabalho</div>
+        <div class="cat-desc">Carreira, produtividade</div>
+      </button>
+      <button class="cat-btn" onclick="selecionarCat(this,'saude')" data-cat="saude">
+        <div class="cat-icon">🌿</div>
+        <div class="cat-nome">Saúde</div>
+        <div class="cat-desc">Corpo, mente, hábitos</div>
+      </button>
+      <button class="cat-btn" onclick="selecionarCat(this,'familia')" data-cat="familia">
+        <div class="cat-icon">🏠</div>
+        <div class="cat-nome">Família</div>
+        <div class="cat-desc">Casa, filhos, pais</div>
+      </button>
+      <button class="cat-btn" onclick="selecionarCat(this,'outro')" data-cat="outro">
+        <div class="cat-icon">✨</div>
+        <div class="cat-nome">Outro</div>
+        <div class="cat-desc">Qualquer situação</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="campo-label">Descreva o problema</label>
+    <textarea id="problemDesc" rows="4" placeholder="Ex: Estou sempre brigando com minha parceira por causa de dinheiro e não consigo entender por quê..."></textarea>
+    <div class="dica">💡 Seja específico — quanto mais detalhes, melhor a análise</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="goPageDirect(1)">Iniciar análise →</button>
+  </div>
+</div>
+
+<!-- PG1: PORQUES -->
+<div id="pg1" class="page">
+  <div class="secao-titulo">Os 5 Por Quês</div>
+  <p class="secao-sub">Para cada resposta, pergunte novamente "mas por quê isso acontece?". Deixe fluir — não existe resposta errada.</p>
+
+  <div class="progresso" id="progresso">
+    <div class="prog-step" id="ps0"></div>
+    <div class="prog-step" id="ps1"></div>
+    <div class="prog-step" id="ps2"></div>
+    <div class="prog-step" id="ps3"></div>
+    <div class="prog-step" id="ps4"></div>
+  </div>
+
+  <div id="porqueChain"></div>
+  <div class="loader" id="loader"><div class="spinner"></div><span>A IA está analisando suas respostas...</span></div>
+
+  <div class="btn-row">
+    <button class="btn-ia" onclick="analisarTudo()">✨ Analisar com IA</button>
+    <button class="btn-secondary" onclick="goPageDirect(2)">Ver resultado →</button>
+  </div>
+</div>
+
+<!-- PG2: RESULTADO -->
+<div id="pg2" class="page">
+  <div class="resultado-hero">
+    <div class="resultado-emoji">🔍</div>
+    <div class="resultado-titulo">Análise concluída</div>
+    <div class="resultado-sub" id="resSubtitulo">Veja o que encontramos sobre a raiz do seu problema</div>
+  </div>
+
+  <div class="causa-raiz">
+    <div class="causa-label">Causa raiz identificada</div>
+    <div class="causa-texto" id="causaRaizTexto">—</div>
+  </div>
+
+  <div class="insight-box" id="insightBox" style="display:none">
+    <div class="insight-titulo">💬 O que isso significa</div>
+    <div id="insightTexto"></div>
+  </div>
+
+  <div class="acao-box" id="acaoBox" style="display:none">
+    <div class="acao-titulo">Próximos passos sugeridos</div>
+    <div id="acaoItens"></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="salvarAnalise()">Salvar análise</button>
+    <button class="btn-secondary" onclick="novaAnalise()">Nova análise</button>
+  </div>
+</div>
+
+<!-- PG3: HISTORICO -->
+<div id="pg3" class="page">
+  <div class="secao-titulo">Suas análises</div>
+  <p class="secao-sub">Acompanhe o que você já explorou e veja padrões nos seus problemas.</p>
+  <div id="histList"></div>
+</div>
+</div>
+
+<script>
+const CATS = {
+  relacionamentos: {icon:'💙', label:'Relacionamentos'},
+  financas: {icon:'💰', label:'Finanças'},
+  trabalho: {icon:'💼', label:'Trabalho'},
+  saude: {icon:'🌿', label:'Saúde'},
+  familia: {icon:'🏠', label:'Família'},
+  outro: {icon:'✨', label:'Outro'}
+};
+
+const PERGUNTAS = [
+  'Por que esse problema está acontecendo?',
+  'Por que isso ocorre?',
+  'E por que isso acontece?',
+  'Mas por que isso existe?',
+  'E qual é a raiz disso tudo?'
+];
+
+const EXEMPLOS = [
+  'Ex: Porque eu gasto mais do que ganho...',
+  'Ex: Porque não consigo dizer não para compras impulsivas...',
+  'Ex: Porque me sinto ansioso e comprar me acalma...',
+  'Ex: Porque nunca aprendi a lidar com ansiedade de outra forma...',
+  'Ex: Porque cresci vendo minha família usar consumo como conforto emocional...'
+];
+
+const DB_KEY = 'porqueapp_historico';
+let catSelecionada = 'relacionamentos';
+let respostas = ['','','','',''];
+let feedbacks = ['','','','',''];
+let ultimaAnalise = null;
+let startTime = Date.now();
+
+// ── BOAS-VINDAS ──────────────────────────────────────────────────────────────
+function iniciarApp() {
+  document.getElementById('welcome').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  construirChain();
+}
+
+function voltarInicio() {
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('welcome').style.display = 'flex';
+}
+
+function verExemplo() {
+  document.getElementById('welcome').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  // Preencher com exemplo
+  selecionarCat(document.querySelector('[data-cat="financas"]'), 'financas');
+  document.getElementById('problemDesc').value = 'Estou sempre sem dinheiro no final do mês e não entendo por quê, mesmo tendo um salário razoável.';
+  respostas = [
+    'Porque eu gasto mais do que ganho todo mês',
+    'Porque faço compras impulsivas, especialmente online',
+    'Porque me sinto ansioso e comprar me alivia temporariamente',
+    'Porque nunca aprendi a lidar com ansiedade de outras formas',
+    'Porque cresci vendo minha família usar o consumo como forma de lidar com problemas emocionais'
+  ];
+  goPageDirect(1);
+  construirChain();
+}
+
+// ── CATEGORIAS ───────────────────────────────────────────────────────────────
+function selecionarCat(btn, cat) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('ativo'));
+  btn.classList.add('ativo');
+  catSelecionada = cat;
+}
+
+// ── CHAIN DE PORQUES ─────────────────────────────────────────────────────────
+function construirChain() {
+  const chain = document.getElementById('porqueChain');
+  chain.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    if (i > 0) {
+      const conn = document.createElement('div');
+      conn.className = 'conector';
+      conn.textContent = '↓ mas por quê?';
+      chain.appendChild(conn);
+    }
+    const val = respostas[i].trim();
+    const cls = val.length > 10 ? 'completo' : (val.length > 0 ? 'ativo' : '');
+    const div = document.createElement('div');
+    div.className = `porque-card ${cls}`;
+    div.id = `pc${i}`;
+    div.innerHTML = `
+      <div class="porque-header">
+        <div class="porque-num">${i + 1}</div>
+        <div>
+          <div class="porque-pergunta">${PERGUNTAS[i]}</div>
+        </div>
+      </div>
+      <textarea id="r${i}" placeholder="${EXEMPLOS[i]}" oninput="onDigitar(${i})" rows="2">${respostas[i]}</textarea>
+      <div class="feedback-ia${feedbacks[i] ? ' show' : ''}" id="fb${i}">${feedbacks[i] || ''}</div>`;
+    chain.appendChild(div);
+    atualizarProgresso();
+  }
+}
+
+function onDigitar(idx) {
+  respostas[idx] = document.getElementById('r' + idx).value;
+  const val = respostas[idx].trim();
+  const card = document.getElementById('pc' + idx);
+  card.className = 'porque-card ' + (val.length > 10 ? 'completo' : (val.length > 0 ? 'ativo' : ''));
+  atualizarProgresso();
+}
+
+function atualizarProgresso() {
+  for (let i = 0; i < 5; i++) {
+    const el = document.getElementById('ps' + i);
+    if (!el) continue;
+    const val = respostas[i].trim();
+    el.className = 'prog-step ' + (val.length > 10 ? 'feito' : (val.length > 0 ? 'ativo' : ''));
+  }
+}
+
+// ── ANÁLISE COM IA ───────────────────────────────────────────────────────────
+async function analisarTudo() {
+  const preenchidas = respostas.filter(r => r.trim().length > 5);
+  if (preenchidas.length < 2) {
+    alert('Preencha pelo menos 2 respostas para analisar.');
+    return;
+  }
+  const loader = document.getElementById('loader');
+  loader.className = 'loader show';
+
+  const problema = document.getElementById('problemDesc')?.value || 'Problema não descrito';
+  const cat = CATS[catSelecionada]?.label || 'Geral';
+  const chain = respostas.map((r, i) => r.trim() ? `Por quê ${i + 1}: ${r.trim()}` : '').filter(Boolean).join('\n');
+
+  const prompt = `Você é um conselheiro empático e prático. Uma pessoa está analisando um problema pessoal usando o método dos 5 Porquês.
+
+Categoria: ${cat}
+Problema: ${problema}
+${chain}
+
+Analise com empatia e retorne APENAS um JSON válido (sem markdown):
+{
+  "causaRaiz": "frase curta e direta identificando a causa raiz real",
+  "feedbacks": ["feedback empático para resposta 1", "feedback 2", "feedback 3", "feedback 4", "feedback 5"],
+  "insight": "2-3 frases explicando o que essa causa raiz revela sobre o padrão de comportamento da pessoa, com empatia",
+  "acoes": ["ação concreta 1", "ação concreta 2", "ação concreta 3"]
+}`;
+
+  try {
+    const resp = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await resp.json();
+    const raw = data.content?.map(c => c.text || '').join('').trim();
+    const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    ultimaAnalise = parsed;
+
+    // Aplicar feedbacks
+    if (parsed.feedbacks) {
+      for (let i = 0; i < 5; i++) {
+        feedbacks[i] = parsed.feedbacks[i] || '';
+        const fb = document.getElementById('fb' + i);
+        if (fb && feedbacks[i]) { fb.className = 'feedback-ia show'; fb.innerHTML = feedbacks[i]; }
+      }
+    }
+
+    loader.className = 'loader';
+    atualizarResultado(parsed);
+    goPageDirect(2);
+  } catch (e) {
+    loader.className = 'loader';
+    alert('Erro na análise. Verifique sua conexão e tente novamente.');
+  }
+}
+
+function atualizarResultado(parsed) {
+  if (!parsed) return;
+  document.getElementById('causaRaizTexto').textContent = parsed.causaRaiz || '—';
+
+  const insightBox = document.getElementById('insightBox');
+  const insightTexto = document.getElementById('insightTexto');
+  if (parsed.insight) {
+    insightBox.style.display = 'block';
+    insightTexto.textContent = parsed.insight;
+  }
+
+  const acaoBox = document.getElementById('acaoBox');
+  const acaoItens = document.getElementById('acaoItens');
+  if (parsed.acoes?.length) {
+    acaoBox.style.display = 'block';
+    acaoItens.innerHTML = parsed.acoes.map((a, i) =>
+      `<div class="acao-item"><div class="acao-bullet">${i + 1}</div><div>${a}</div></div>`
+    ).join('');
+  }
+}
+
+// ── SALVAR / HISTÓRICO ───────────────────────────────────────────────────────
+function salvarAnalise() {
+  if (!ultimaAnalise) { alert('Faça a análise com IA primeiro.'); return; }
+  const problema = document.getElementById('problemDesc')?.value || '';
+  if (!problema.trim()) { alert('Descreva o problema antes de salvar.'); return; }
+
+  const record = {
+    id: Date.now(),
+    data: new Date().toLocaleDateString('pt-BR'),
+    categoria: catSelecionada,
+    problema,
+    respostas: [...respostas],
+    causaRaiz: ultimaAnalise.causaRaiz || '',
+    insight: ultimaAnalise.insight || '',
+    acoes: ultimaAnalise.acoes || []
+  };
+
+  const db = carregarDB();
+  db.unshift(record);
+  localStorage.setItem(DB_KEY, JSON.stringify(db));
+
+  const msg = document.createElement('div');
+  msg.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--verde);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-family:Inter,sans-serif;z-index:999';
+  msg.textContent = '✓ Análise salva!';
+  document.body.appendChild(msg);
+  setTimeout(() => msg.remove(), 2000);
+}
+
+function carregarDB() {
+  try { return JSON.parse(localStorage.getItem(DB_KEY) || '[]'); } catch { return []; }
+}
+
+function renderizarHistorico() {
+  const db = carregarDB();
+  const list = document.getElementById('histList');
+  if (!db.length) {
+    list.innerHTML = '<div class="hist-vazio">Você ainda não salvou nenhuma análise.<br>Complete uma análise e clique em "Salvar análise".</div>';
+    return;
+  }
+  list.innerHTML = db.map((r, idx) => `
+    <div class="hist-item" onclick="toggleDetalhe(${idx})">
+      <div class="hist-problema">${r.problema.substring(0, 80)}${r.problema.length > 80 ? '...' : ''}</div>
+      <div class="hist-meta">
+        <span class="hist-badge">${CATS[r.categoria]?.icon || '✨'} ${CATS[r.categoria]?.label || 'Outro'}</span>
+        <span class="hist-badge">${r.data}</span>
+        <span class="hist-badge verde">${r.respostas.filter(a => a.trim()).length} por quês</span>
+      </div>
+      <div class="hist-detalhe" id="hd${idx}">
+        <strong>Causa raiz:</strong> ${r.causaRaiz || '—'}<br><br>
+        <strong>Insight:</strong> ${r.insight || '—'}
+      </div>
+    </div>`).join('');
+}
+
+function toggleDetalhe(idx) {
+  const d = document.getElementById('hd' + idx);
+  d.style.display = d.style.display === 'block' ? 'none' : 'block';
+}
+
+// ── NAVEGAÇÃO ────────────────────────────────────────────────────────────────
+function goPage(idx, tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('pg' + idx).classList.add('active');
+  tab.classList.add('active');
+  if (idx === 1) construirChain();
+  if (idx === 2) atualizarResultado(ultimaAnalise);
+  if (idx === 3) renderizarHistorico();
+}
+
+function goPageDirect(idx) {
+  const tabs = document.querySelectorAll('.tab');
+  goPage(idx, tabs[idx]);
+}
+
+function novaAnalise() {
+  respostas = ['', '', '', '', ''];
+  feedbacks = ['', '', '', '', ''];
+  ultimaAnalise = null;
+  startTime = Date.now();
+  document.getElementById('problemDesc').value = '';
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('ativo'));
+  document.querySelector('[data-cat="relacionamentos"]').classList.add('ativo');
+  catSelecionada = 'relacionamentos';
+  goPageDirect(0);
+}
+</script>
+</body>
+</html>
