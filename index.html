@@ -328,6 +328,9 @@ let startTime = Date.now();
 
 // ── BOAS-VINDAS ──────────────────────────────────────────────────────────────
 function iniciarApp() {
+  respostas = ['', '', '', '', ''];
+  feedbacks = ['', '', '', '', ''];
+  ultimaAnalise = null;
   document.getElementById('welcome').style.display = 'none';
   document.getElementById('mainApp').style.display = 'block';
   construirChain();
@@ -569,6 +572,7 @@ function goPageDirect(idx) {
 function novaAnalise() {
   respostas = ['', '', '', '', ''];
   feedbacks = ['', '', '', '', ''];
+  ultimaAnalise = null;
   ultimaAnalise = null;
   startTime = Date.now();
   document.getElementById('problemDesc').value = '';
