@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -103,6 +104,11 @@ textarea:focus,input:focus{border-color:var(--verde-claro);background:var(--bran
 .insight-box{background:var(--creme-escuro);border-radius:16px;padding:1.25rem;margin-bottom:10px;font-size:14px;color:var(--texto-suave);line-height:1.7}
 .insight-titulo{font-weight:600;color:var(--texto);margin-bottom:6px;font-size:14px}
 .acao-box{background:var(--verde-suave);border-radius:16px;padding:1.25rem;margin-bottom:10px}
+.disclaimer{background:#FFF8E7;border:1px solid #F5C842;border-radius:12px;padding:12px 16px;margin-bottom:10px;font-size:13px;color:#7A5C00;line-height:1.6}
+.disclaimer strong{color:#5C4500;display:block;margin-bottom:4px}
+.disclaimer a{color:#5C4500;text-decoration:underline}
+.aviso-crise{background:#FFF0F0;border:1px solid #F5A0A0;border-radius:12px;padding:12px 16px;margin-bottom:10px;font-size:13px;color:#8B0000;line-height:1.6;display:none}
+.aviso-crise strong{display:block;margin-bottom:4px}
 .acao-titulo{font-size:12px;font-weight:600;color:var(--verde);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px}
 .acao-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;font-size:14px;color:var(--texto)}
 .acao-item:last-child{margin-bottom:0}
@@ -280,6 +286,14 @@ textarea:focus,input:focus{border-color:var(--verde-claro);background:var(--bran
   </div>
 
   <div class="btn-row">
+    <div class="aviso-crise" id="avisoCrise">
+      <strong>⚠️ Percebemos um tema sensível na sua análise</strong>
+      Se você está passando por sofrimento emocional intenso, ansiedade severa ou pensamentos difíceis, por favor procure ajuda profissional. O CVV atende 24h pelo telefone <strong>188</strong> ou em <a href="https://www.cvv.org.br" target="_blank">cvv.org.br</a>.
+    </div>
+    <div class="disclaimer">
+      <strong>⚠️ Aviso importante</strong>
+      Esta análise é uma ferramenta de <strong>autoconhecimento e reflexão pessoal</strong>. Não constitui diagnóstico, aconselhamento psicológico, médico ou terapêutico. Não substitui a avaliação de um profissional de saúde mental. Ao usar este app você concorda com nossos <a href="termos.html" target="_blank">Termos de Uso</a>.
+    </div>
     <button class="btn-primary" onclick="salvarAnalise()">Salvar análise</button>
     <button class="btn-secondary" onclick="novaAnalise()">Nova análise</button>
   </div>
@@ -328,9 +342,6 @@ let startTime = Date.now();
 
 // ── BOAS-VINDAS ──────────────────────────────────────────────────────────────
 function iniciarApp() {
-  respostas = ['', '', '', '', ''];
-  feedbacks = ['', '', '', '', ''];
-  ultimaAnalise = null;
   document.getElementById('welcome').style.display = 'none';
   document.getElementById('mainApp').style.display = 'block';
   construirChain();
@@ -426,7 +437,7 @@ async function analisarTudo() {
   const cat = CATS[catSelecionada]?.label || 'Geral';
   const chain = respostas.map((r, i) => r.trim() ? `Por quê ${i + 1}: ${r.trim()}` : '').filter(Boolean).join('\n');
 
-  const prompt = `Você é um conselheiro empático e prático. Uma pessoa está analisando um problema pessoal usando o método dos 5 Porquês.
+  const prompt = `Você é um facilitador de autoconhecimento empático. Ajuda pessoas a refletirem sobre seus problemas usando o método dos 5 Porquês. IMPORTANTE: Você NÃO é terapeuta, psicólogo nem médico. Suas respostas são reflexões para autoconhecimento, nunca diagnósticos ou prescrições. Se identificar sofrimento emocional intenso, depressão, ansiedade severa ou risco, oriente a buscar ajuda profissional.
 
 Categoria: ${cat}
 Problema: ${problema}
@@ -434,10 +445,11 @@ ${chain}
 
 Analise com empatia e retorne APENAS um JSON válido (sem markdown):
 {
-  "causaRaiz": "frase curta e direta identificando a causa raiz real",
-  "feedbacks": ["feedback empático para resposta 1", "feedback 2", "feedback 3", "feedback 4", "feedback 5"],
-  "insight": "2-3 frases explicando o que essa causa raiz revela sobre o padrão de comportamento da pessoa, com empatia",
-  "acoes": ["ação concreta 1", "ação concreta 2", "ação concreta 3"]
+  "causaRaiz": "frase curta identificando o padrão ou crença central que gera o problema",
+  "feedbacks": ["reflexão empática para resposta 1", "reflexão 2", "reflexão 3", "reflexão 4", "reflexão 5"],
+  "insight": "2-3 frases de reflexão sobre o padrão identificado, sempre em primeira pessoa do ponto de vista da pessoa, com acolhimento e sem julgamento",
+  "acoes": ["passo concreto de reflexão ou ação 1", "passo 2", "passo 3"],
+  "temaSensivel": true ou false (true se envolver saúde mental, automutilação, suicídio, abuso, dependência química ou sofrimento emocional intenso)
 }`;
 
   try {
@@ -492,6 +504,8 @@ function atualizarResultado(parsed) {
       `<div class="acao-item"><div class="acao-bullet">${i + 1}</div><div>${a}</div></div>`
     ).join('');
   }
+  const avisoCrise = document.getElementById('avisoCrise');
+  if (parsed.temaSensivel === true && avisoCrise) { avisoCrise.style.display = 'block'; }
 }
 
 // ── SALVAR / HISTÓRICO ───────────────────────────────────────────────────────
@@ -572,7 +586,6 @@ function goPageDirect(idx) {
 function novaAnalise() {
   respostas = ['', '', '', '', ''];
   feedbacks = ['', '', '', '', ''];
-  ultimaAnalise = null;
   ultimaAnalise = null;
   startTime = Date.now();
   document.getElementById('problemDesc').value = '';
