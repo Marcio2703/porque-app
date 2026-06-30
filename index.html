@@ -230,7 +230,7 @@ textarea:focus,input:focus{border-color:var(--verde-claro);background:var(--bran
 
   <div class="card">
     <label class="campo-label">Descreva o problema</label>
-    <textarea id="problemDesc" rows="4" placeholder="Ex: Estou sempre brigando com minha parceira por causa de dinheiro e não consigo entender por quê..."></textarea>
+    <textarea id="problemDesc" rows="4" placeholder="Ex: Estou sempre brigando com minha parceira por causa de dinheiro e não consigo entender por quê..." oninput="atualizarEstadoAbas()"></textarea>
     <div class="dica">💡 Seja específico — quanto mais detalhes, melhor a análise</div>
   </div>
 
@@ -368,9 +368,13 @@ function liberarVerResultado() {
 }
 
 function iniciarApp() {
+  respostas = ['', '', '', '', ''];
+  feedbacks = ['', '', '', '', ''];
+  ultimaAnalise = null;
   document.getElementById('welcome').style.display = 'none';
   document.getElementById('mainApp').style.display = 'block';
   construirChain();
+  atualizarEstadoAbas();
 }
 
 function voltarInicio() {
@@ -393,6 +397,7 @@ function verExemplo() {
   ];
   goPageDirect(1);
   construirChain();
+  atualizarEstadoAbas();
 }
 
 // ── CATEGORIAS ───────────────────────────────────────────────────────────────
@@ -504,6 +509,7 @@ Analise com empatia e retorne APENAS um JSON válido (sem markdown):
 
     loader.className = 'loader';
     liberarVerResultado();
+    atualizarEstadoAbas();
     atualizarResultado(parsed);
     goPageDirect(2);
   } catch (e) {
@@ -595,7 +601,33 @@ function toggleDetalhe(idx) {
 }
 
 // ── NAVEGAÇÃO ────────────────────────────────────────────────────────────────
+function etapaLiberada(idx) {
+  if (idx === 0) return true;
+  if (idx === 1) {
+    var problema = document.getElementById('problemDesc').value.trim();
+    return problema.length > 0;
+  }
+  if (idx === 2) {
+    return ultimaAnalise !== null;
+  }
+  if (idx === 3) return true;
+  return false;
+}
+
 function goPage(idx, tab) {
+  if (!etapaLiberada(idx)) {
+    if (idx === 1) {
+      var campo = document.getElementById('problemDesc');
+      campo.style.borderColor = '#E07B39';
+      campo.focus();
+      setTimeout(function() { campo.style.borderColor = ''; }, 2000);
+      goPage(0, document.querySelectorAll('.tab')[0]);
+    }
+    if (idx === 2) {
+      alert('Primeiro preencha os por ques e clique em "Analisar com IA".');
+    }
+    return;
+  }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('pg' + idx).classList.add('active');
@@ -603,6 +635,20 @@ function goPage(idx, tab) {
   if (idx === 1) construirChain();
   if (idx === 2) atualizarResultado(ultimaAnalise);
   if (idx === 3) renderizarHistorico();
+  atualizarEstadoAbas();
+}
+
+function atualizarEstadoAbas() {
+  var tabs = document.querySelectorAll('.tab');
+  for (var i = 0; i < tabs.length; i++) {
+    if (etapaLiberada(i)) {
+      tabs[i].style.opacity = '1';
+      tabs[i].style.cursor = 'pointer';
+    } else {
+      tabs[i].style.opacity = '0.4';
+      tabs[i].style.cursor = 'not-allowed';
+    }
+  }
 }
 
 function goPageDirect(idx) {
@@ -622,7 +668,9 @@ function novaAnalise() {
   document.querySelector('[data-cat="relacionamentos"]').classList.add('ativo');
   catSelecionada = 'relacionamentos';
   goPageDirect(0);
+  atualizarEstadoAbas();
 }
 </script>
 </body>
 </html>
+
